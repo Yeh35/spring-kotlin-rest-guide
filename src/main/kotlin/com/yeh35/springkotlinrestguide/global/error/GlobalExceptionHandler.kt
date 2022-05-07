@@ -29,8 +29,8 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * @ModelAttribut 으로 binding error 발생시 BindException 발생한다.
-     * ref https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args
+     * "@ModelAttribut"으로 binding error 발생시 BindException 발생한다.
+     * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args">mvc-ann-modelattrib-method-args</a>
      */
     @ExceptionHandler(BindException::class)
     protected fun handleBindException(e: BindException): ResponseEntity<ErrorResponse> {
@@ -75,7 +75,7 @@ class GlobalExceptionHandler {
     protected fun handleBusinessException(e: BusinessException): ResponseEntity<ErrorResponse> {
         logger.error("handleEntityNotFoundException", e)
         val errorCode: ErrorCode = e.errorCode
-        val response: ErrorResponse = ErrorResponse.of(errorCode)
+        val response: ErrorResponse = ErrorResponse.of(e, errorCode)
         return ResponseEntity<ErrorResponse>(response, HttpStatus.valueOf(errorCode.status))
     }
 
