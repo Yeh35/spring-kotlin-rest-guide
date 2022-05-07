@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  local_mysql8:
+    container_name: mysql8
+    image: mysql:8.0.18
+    environment:
+      MYSQL_DATABASE: localTest
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+
