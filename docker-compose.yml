@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   local_mysql8:
-    container_name: mysql8
+    container_name: mysql_8
     image: mysql:8.0.18
     environment:
       MYSQL_DATABASE: localTest
