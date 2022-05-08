@@ -6,13 +6,16 @@ import com.yeh35.springkotlinrestguide.domain.shop.domain.Review
 import com.yeh35.springkotlinrestguide.domain.shop.domain.Shop
 import com.yeh35.springkotlinrestguide.domain.shop.dto.CreateShopDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional(readOnly = true)
 @Service
 class ShopService(
     val shopRepository: ShopRepository,
     val reviewRepository: ReviewRepository
 ) {
 
+    @Transactional
     fun create(createShopDto: CreateShopDto): Shop {
         return shopRepository.save(createShopDto.toShop())
     }
@@ -25,11 +28,8 @@ class ShopService(
         return shopRepository.findAll()
     }
 
-
     fun getReviews(id: Long): List<Review> {
         val shop = this.get(id)
         return reviewRepository.findAllByShop(shop).orElseGet { listOf() }
     }
-
-
 }
