@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "shops")
 class Shop {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
         private set
 
@@ -26,4 +26,6 @@ class Shop {
         this.type = type
         this.address = address
     }
+
+
 }

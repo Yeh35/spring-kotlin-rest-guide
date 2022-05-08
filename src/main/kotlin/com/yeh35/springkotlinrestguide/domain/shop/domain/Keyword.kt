@@ -1,14 +1,12 @@
 package com.yeh35.springkotlinrestguide.domain.shop.domain
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "keywords")
 class Keyword {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
         private set
 

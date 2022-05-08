@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(name = "reviews")
 class Review {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
         private set
 
