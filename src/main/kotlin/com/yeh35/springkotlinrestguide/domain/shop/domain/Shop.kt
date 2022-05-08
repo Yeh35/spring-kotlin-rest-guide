@@ -21,8 +21,7 @@ class Shop {
     @Embedded
     var address: Address
 
-    constructor(id: Long, name: String, type: ShopType, address: Address) {
-        this.id = id
+    constructor(name: String, type: ShopType, address: Address) {
         this.name = name
         this.type = type
         this.address = address
