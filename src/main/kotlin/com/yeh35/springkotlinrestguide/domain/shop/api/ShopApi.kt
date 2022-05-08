@@ -6,7 +6,7 @@ import com.yeh35.springkotlinrestguide.domain.shop.domain.Shop
 import com.yeh35.springkotlinrestguide.domain.shop.dto.CreateShopDto
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/shops")
+@RequestMapping("\${api-prefix}/shops")
 @RestController
 class ShopApi(
     val shopService: ShopService
