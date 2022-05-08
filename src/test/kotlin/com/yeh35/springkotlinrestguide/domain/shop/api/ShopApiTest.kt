@@ -2,11 +2,12 @@ package com.yeh35.springkotlinrestguide.domain.shop.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yeh35.springkotlinrestguide.End2EndSpringBootTest
+import com.yeh35.springkotlinrestguide.domain.shop.dao.AuthRepository
+import com.yeh35.springkotlinrestguide.domain.shop.dao.ReviewRepository
 import com.yeh35.springkotlinrestguide.domain.shop.dao.ShopRepository
-import com.yeh35.springkotlinrestguide.domain.shop.domain.Address
-import com.yeh35.springkotlinrestguide.domain.shop.domain.Shop
-import com.yeh35.springkotlinrestguide.domain.shop.domain.ShopType
+import com.yeh35.springkotlinrestguide.domain.shop.domain.*
 import com.yeh35.springkotlinrestguide.domain.shop.dto.CreateShopDto
+import com.yeh35.springkotlinrestguide.domain.shop.dto.WriteReviewDto
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +26,12 @@ internal class ShopApiTest {
 
     @Autowired
     private lateinit var shopRepeatable: ShopRepository
+
+    @Autowired
+    private lateinit var reviewRepository: ReviewRepository
+
+    @Autowired
+    private lateinit var authRepository: AuthRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -99,4 +106,38 @@ internal class ShopApiTest {
             }
     }
 
+    @Test
+    internal fun writeReview() {
+        val address = Address("서울특별시", "서대문구", "대충 어느길", "123", "여기에유")
+        val shop = Shop("식당 어딘", ShopType.CAFE, address)
+        shopRepeatable.save(shop)
+
+        val auth = Auth(name = "미식갓")
+        authRepository.save(auth)
+
+        val reviewDto = WriteReviewDto(
+            authId = auth.id,
+            review = "맛있지만 2번은 안갈거 같아요",
+            keyword = listOf("신촌", "배고파", "호랑이")
+        )
+
+        mockMvc.perform(
+            post("/api/shops/${shop.id}/reviews")
+                .content(objectMapper.writeValueAsString(reviewDto))
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect { result ->
+                val json = result.response.contentAsString
+                assertTrue(json.isNotEmpty())
+                val review = objectMapper.readValue(json, Review::class.java)
+                assertNotEquals(0, review.id)
+                assertEquals(reviewDto.review, review.review)
+                assertEquals(shop.id, review.shop.id)
+                assertEquals(auth.id, review.auth.id)
+
+                val dbReview = reviewRepository.findById(review.id)
+                assertFalse(dbReview.isEmpty)
+            }
+    }
 }
