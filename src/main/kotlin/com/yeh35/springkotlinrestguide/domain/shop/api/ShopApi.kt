@@ -32,6 +32,4 @@ class ShopApi(
     fun getShopReview(@PathVariable id: Long): List<Review> {
         return shopService.getReviews(id)
     }
-
-
 }
