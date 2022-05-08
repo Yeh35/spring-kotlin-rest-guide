@@ -12,5 +12,7 @@ Spring Boot와 Kotlin을 활용한 Rest API 서버 구축에 필요한 기본적
 ## Dependency
 * Spring Boot  
 * Spring Boot Web
-
+* Spring Data JPA
+* MySQL
+* H2
 
